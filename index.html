@@ -34,6 +34,47 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
+        .time-selector {
+            background: #fff;
+            color: #004587;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .time-selector label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .time-selector select {
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #004587;
+            border-radius: 6px;
+            font-family: 'Gotham', sans-serif;
+            margin-right: 1rem;
+        }
+        
+        .start-btn {
+            background: #fbba07;
+            color: #004587;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+        
         .timer {
             background: #fbba07;
             color: #004587;
@@ -44,6 +85,11 @@
             font-weight: bold;
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: none;
+        }
+        
+        .timer.active {
+            display: block;
         }
         
         .study-resources {
@@ -51,6 +97,11 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .study-resources.active {
+            display: grid;
         }
         
         .resource-btn {
@@ -73,263 +124,34 @@
             box-shadow: 0 6px 12px rgba(251, 186, 7, 0.4);
         }
         
-        .reflection-section {
+        .video-modal {
             display: none;
-            background: #fff;
-            color: #004587;
-            padding: 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .video-modal.active {
+            display: flex;
+        }
+        
+        .video-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .video-container video {
+            max-width: 100%;
+            max-height: 80vh;
             border-radius: 12px;
-            margin-top: 2rem;
         }
         
-        .reflection-section.active {
-            display: block;
-        }
-        
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .input-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .input-group.win label {
-            color: #004587;
-        }
-        
-        .input-group.wobble label {
-            color: #e73037;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            border: 2px solid #004587;
-            border-radius: 8px;
-            font-family: 'Gotham', sans-serif;
-        }
-        
-        .wobble input {
-            border-color: #e73037;
-        }
-        
-        .autocomplete-results {
-            border: 2px solid #004587;
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            background: #fff;
-        }
-        
-        .autocomplete-item {
-            padding: 0.75rem;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .autocomplete-item:hover {
-            background: #fbba07;
-        }
-        
-        .concept-unit {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.25rem;
-        }
-        
-        .selected-concept {
-            display: inline-block;
-            background: #fbba07;
-            color: #004587;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            margin-top: 0.5rem;
-            font-weight: bold;
-        }
-        
-        .submit-btn {
-            background: #fbba07;
-            color: #004587;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.25rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-            transition: transform 0.2s;
-        }
-        
-        .submit-btn:hover {
-            transform: scale(1.02);
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>2 Wins and a Wobble</h1>
-        
-        <div class="timer" id="timer">
-            Study Time: 15:00
-        </div>
-        
-        <div class="study-resources" id="studySection">
-            <a href="flashcards.html" class="resource-btn" target="_blank">📚 Flashcards</a>
-            <a href="exam-practice.html" class="resource-btn" target="_blank">✍️ Exam Practice</a>
-            <a href="mark-schemes.html" class="resource-btn" target="_blank">📋 Mark Schemes</a>
-        </div>
-        
-        <div class="reflection-section" id="reflectionSection">
-            <h2 style="margin-bottom: 1.5rem; color: #004587;">Time to Reflect!</h2>
-            
-            <div class="input-group win">
-                <label>🏆 Win #1: What did you nail?</label>
-                <input type="text" id="win1Input" placeholder="Start typing a concept...">
-                <div class="autocomplete-results" id="win1Results"></div>
-                <div id="win1Selected"></div>
-            </div>
-            
-            <div class="input-group win">
-                <label>🏆 Win #2: What else are you confident about?</label>
-                <input type="text" id="win2Input" placeholder="Start typing a concept...">
-                <div class="autocomplete-results" id="win2Results"></div>
-                <div id="win2Selected"></div>
-            </div>
-            
-            <div class="input-group wobble">
-                <label>⚠️ Wobble: What did you discover you didn't know?</label>
-                <input type="text" id="wobbleInput" placeholder="Start typing a concept...">
-                <div class="autocomplete-results" id="wobbleResults"></div>
-                <div id="wobbleSelected"></div>
-            </div>
-            
-            <button class="submit-btn" id="submitBtn" disabled>Submit to Microsoft Form</button>
-        </div>
-    </div>
+        .c
 
-    <script>
-        // Sample SEHS concepts database - expand this with your full curriculum
-        const sehsConcepts = [
-            { id: "atp-pc", name: "ATP-PC System", unit: "1.2.1", topic: "Energy Systems" },
-            { id: "lactate", name: "Lactate Threshold", unit: "2.3.1", topic: "Aerobic Training" },
-            { id: "prp", name: "Psychological Refractory Period", unit: "6.2.4", topic: "Skill Acquisition" },
-            { id: "cardiac-output", name: "Cardiac Output", unit: "1.1.3", topic: "Cardiovascular System" },
-            { id: "sliding-filament", name: "Sliding Filament Theory", unit: "1.1.1", topic: "Muscle Contraction" },
-            { id: "vo2max", name: "VO2 Max", unit: "2.3.2", topic: "Aerobic Capacity" },
-            { id: "fast-twitch", name: "Fast-Twitch Muscle Fibers", unit: "1.1.2", topic: "Muscle Fiber Types" }
-            // Add all your SEHS concepts here
-        ];
-
-        // Timer functionality
-        let timeRemaining = 15 * 60; // 15 minutes in seconds
-        const timerDisplay = document.getElementById('timer');
-        const studySection = document.getElementById('studySection');
-        const reflectionSection = document.getElementById('reflectionSection');
-
-        function updateTimer() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            timerDisplay.textContent = `Study Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
-            if (timeRemaining === 0) {
-                timerDisplay.textContent = "Time's up! Time to reflect 🎯";
-                timerDisplay.style.background = '#e73037';
-                timerDisplay.style.color = '#fff';
-                studySection.style.display = 'none';
-                reflectionSection.classList.add('active');
-            } else {
-                timeRemaining--;
-            }
-        }
-
-        const timerInterval = setInterval(updateTimer, 1000);
-
-        // Autocomplete functionality
-        const selections = {
-            win1: null,
-            win2: null,
-            wobble: null
-        };
-
-        function setupAutocomplete(inputId, resultsId, selectedId, key) {
-            const input = document.getElementById(inputId);
-            const resultsDiv = document.getElementById(resultsId);
-            const selectedDiv = document.getElementById(selectedId);
-
-            input.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase().trim();
-                resultsDiv.innerHTML = '';
-                
-                if (query.length < 2) return;
-
-                const matches = sehsConcepts.filter(concept => 
-                    concept.name.toLowerCase().includes(query) ||
-                    concept.unit.toLowerCase().includes(query)
-                );
-
-                matches.slice(0, 5).forEach(concept => {
-                    const item = document.createElement('div');
-                    item.className = 'autocomplete-item';
-                    item.innerHTML = `
-                        <strong>${concept.name}</strong>
-                        <div class="concept-unit">Unit ${concept.unit}: ${concept.topic}</div>
-                    `;
-                    item.addEventListener('click', () => {
-                        selections[key] = concept;
-                        input.value = '';
-                        resultsDiv.innerHTML = '';
-                        selectedDiv.innerHTML = `
-                            <div class="selected-concept">
-                                ✓ ${concept.name} (Unit ${concept.unit})
-                            </div>
-                        `;
-                        checkSubmitReady();
-                    });
-                    resultsDiv.appendChild(item);
-                });
-            });
-        }
-
-        setupAutocomplete('win1Input', 'win1Results', 'win1Selected', 'win1');
-        setupAutocomplete('win2Input', 'win2Results', 'win2Selected', 'win2');
-        setupAutocomplete('wobbleInput', 'wobbleResults', 'wobbleSelected', 'wobble');
-
-        function checkSubmitReady() {
-            const submitBtn = document.getElementById('submitBtn');
-            if (selections.win1 && selections.win2 && selections.wobble) {
-                submitBtn.disabled = false;
-            }
-        }
-
-        // Submit to Microsoft Form with pre-filled data
-        document.getElementById('submitBtn').addEventListener('click', () => {
-            // Replace with your actual Microsoft Form URL and field IDs
-            const formBaseUrl = 'https://forms.office.com/r/YOUR_FORM_ID';
-            
-            // Build URL parameters (you'll need to find your Form's field IDs)
-            const params = new URLSearchParams({
-                'entry.win1_concept': selections.win1.name,
-                'entry.win1_unit': selections.win1.unit,
-                'entry.win2_concept': selections.win2.name,
-                'entry.win2_unit': selections.win2.unit,
-                'entry.wobble_concept': selections.wobble.name,
-                'entry.wobble_unit': selections.wobble.unit
-            });
-
-            window.open(`${formBaseUrl}?${params.toString()}`, '_blank');
-        });
-    </script>
-</body>
-</html>
