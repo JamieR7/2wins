@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2 Wins and a Wobble</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23004587'/><text x='15' y='50' font-size='35' fill='%23fbba07'>✓</text><text x='50' y='50' font-size='35' fill='%23fbba07'>✓</text><text x='75' y='50' font-size='35' fill='%23e73037'>?</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23004587'/><text x='20' y='65' font-size='40' font-weight='bold' fill='%23fbba07'>✓</text><text x='50' y='65' font-size='40' font-weight='bold' fill='%23fbba07'>✓</text><text x='78' y='65' font-size='50' font-weight='bold' fill='%23ff3333'>?</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -136,13 +136,19 @@
             border-radius: 6px;
             margin-top: 0.5rem;
             font-weight: 600;
-            width: 100%;
-            max-width: 200px;
+            width: auto;
+            min-width: 200px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .music-player audio {
             margin-top: 0.75rem;
             width: 100%;
             max-width: 250px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .reflection-section {
             display: none;
