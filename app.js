@@ -27,49 +27,135 @@ function updateTimer() {
     }
 }
 
-// Celebration function with fireworks and sound
+// Celebration function with extended fireworks and fanfare
 function celebrate() {
     const timer = document.getElementById('timer');
     timer.textContent = "🎉 Time's up! Great work! 🎉";
     timer.style.background = '#fbba07';
     timer.style.color = '#004587';
-    timer.style.animation = 'pulse 0.5s ease-in-out 3';
+    timer.style.animation = 'pulse 0.5s ease-in-out infinite';
     
-    // Play celebration sound
-    const celebrationSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZSA0PVKzn77BdGAg+ltzykHEeBSuBzvLaiTcIGWi77eefTRAMUKfj8LZjHAY4ktfyzHksBSR3x/DdkEAKFF606+uoVRQKRp/g8r5sIQUxh9Hz04IzBh5uwO/jmUgND1Ss5++wXRgIPpbS8pBxHgUrgc7y2ok3CBlou+3nn00QDFCn4/C2YxwGOJLX8sx5LAUkd8fw3ZBACha=');
-    celebrationSound.play().catch(() => console.log('Sound autoplay blocked'));
+    // Play triumphant fanfare
+    playFanfare();
     
-    // Fireworks animation
-    createFireworks();
+    // 1 minute of continuous fireworks
+    createFireworks(60000); // 60 seconds = 60,000 milliseconds
+    
+    // Stop pulse animation after 1 minute
+    setTimeout(() => {
+        timer.style.animation = 'none';
+    }, 60000);
 }
 
-// Confetti/Fireworks effect
-function createFireworks() {
-    const colors = ['#fbba07', '#004587', '#e73037', '#00ff00', '#ff00ff'];
+// Epic fanfare sound using Web Audio API
+function playFanfare() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Triumphant melody notes (frequencies in Hz)
+    const melody = [
+        { freq: 523.25, start: 0, duration: 0.2 },    // C5
+        { freq: 659.25, start: 0.2, duration: 0.2 },  // E5
+        { freq: 783.99, start: 0.4, duration: 0.2 },  // G5
+        { freq: 1046.50, start: 0.6, duration: 0.4 }, // C6 (hold)
+        { freq: 987.77, start: 1.0, duration: 0.15 }, // B5
+        { freq: 1046.50, start: 1.15, duration: 0.15 },// C6
+        { freq: 1174.66, start: 1.3, duration: 0.3 }, // D6
+        { freq: 1046.50, start: 1.6, duration: 0.6 }, // C6 (finale hold)
+    ];
+    
+    melody.forEach(note => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = note.freq;
+        oscillator.type = 'triangle'; // Softer, more musical sound
+        
+        // Envelope for smooth attack and release
+        const now = audioContext.currentTime;
+        gainNode.gain.setValueAtTime(0, now + note.start);
+        gainNode.gain.linearRampToValueAtTime(0.3, now + note.start + 0.05);
+        gainNode.gain.linearRampToValueAtTime(0.2, now + note.start + note.duration - 0.05);
+        gainNode.gain.linearRampToValueAtTime(0, now + note.start + note.duration);
+        
+        oscillator.start(now + note.start);
+        oscillator.stop(now + note.start + note.duration);
+    });
+}
+
+// Massive continuous fireworks for 1 minute
+function createFireworks(duration) {
+    const colors = ['#fbba07', '#004587', '#e73037', '#00ff00', '#ff00ff', '#00ffff', '#ff6b35', '#f7931e'];
     const fireworksContainer = document.createElement('div');
-    fireworksContainer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    fireworksContainer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
     document.body.appendChild(fireworksContainer);
     
-    for (let i = 0; i < 100; i++) {
-        setTimeout(() => {
-            const firework = document.createElement('div');
-            firework.style.cssText = `
-                position: absolute;
-                width: 10px;
-                height: 10px;
-                background: ${colors[Math.floor(Math.random() * colors.length)]};
-                border-radius: 50%;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                animation: explode 1s ease-out forwards;
-            `;
-            fireworksContainer.appendChild(firework);
-            
-            setTimeout(() => firework.remove(), 1000);
-        }, i * 30);
-    }
+    let elapsed = 0;
+    const interval = setInterval(() => {
+        // Launch multiple firework bursts
+        for (let burst = 0; burst < 3; burst++) {
+            setTimeout(() => {
+                launchFirework(fireworksContainer, colors);
+            }, burst * 100);
+        }
+        
+        elapsed += 200;
+        if (elapsed >= duration) {
+            clearInterval(interval);
+            setTimeout(() => fireworksContainer.remove(), 2000);
+        }
+    }, 200); // New fireworks every 200ms
+}
+
+function launchFirework(container, colors) {
+    const launchX = Math.random() * 100;
+    const launchY = 20 + Math.random() * 60; // Launch from top half of screen
+    const burstColor = colors[Math.floor(Math.random() * colors.length)];
+    const particleCount = 30 + Math.floor(Math.random() * 20); // 30-50 particles per burst
     
-    setTimeout(() => fireworksContainer.remove(), 4000);
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const velocity = 100 + Math.random() * 100;
+        const deltaX = Math.cos(angle) * velocity;
+        const deltaY = Math.sin(angle) * velocity;
+        const size = 4 + Math.random() * 6;
+        
+        particle.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${burstColor};
+            border-radius: 50%;
+            left: ${launchX}%;
+            top: ${launchY}%;
+            box-shadow: 0 0 ${size * 2}px ${burstColor};
+            animation: explode${Math.random()} 1.5s ease-out forwards;
+        `;
+        
+        // Unique animation for each particle
+        const animationName = `explode${Math.random().toString(36).substr(2, 9)}`;
+        const keyframes = `
+            @keyframes ${animationName} {
+                0% { transform: translate(0, 0) scale(1); opacity: 1; }
+                100% { transform: translate(${deltaX}px, ${deltaY}px) scale(0); opacity: 0; }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = keyframes;
+        document.head.appendChild(styleSheet);
+        particle.style.animation = `${animationName} 1.5s ease-out forwards`;
+        
+        container.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.remove();
+            styleSheet.remove();
+        }, 1500);
+    }
 }
 
 // Add animation styles
@@ -78,10 +164,6 @@ style.textContent = `
     @keyframes pulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.05); }
-    }
-    @keyframes explode {
-        0% { transform: translate(0, 0) scale(1); opacity: 1; }
-        100% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(0); opacity: 0; }
     }
 `;
 document.head.appendChild(style);
