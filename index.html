@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2 Wins and a Wobble</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23004587'/><text x='20' y='65' font-size='40' font-weight='bold' fill='%23fbba07'>✓</text><text x='50' y='65' font-size='40' font-weight='bold' fill='%23fbba07'>✓</text><text x='78' y='65' font-size='50' font-weight='bold' fill='%23ff3333'>?</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,6 +23,24 @@
             color: #fbba07;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             font-weight: 700;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #fbba07;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-family: 'Gotham', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 300;
+            font-size: 1.15rem;
+        }
+        .instructions p {
+            margin: 0;
+        }
+        .instructions strong {
+            color: #fbba07;
+            font-weight: 500;
         }
         .time-selector {
             background: #fff;
@@ -118,38 +137,37 @@
             margin-top: 0.5rem;
         }
         .music-player {
-    background: #fbba07;
-    color: #004587;
-    padding: 1rem;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 80px;
-    grid-column: 1 / -1;
-    max-width: 400px;
-    margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-.music-player select {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: 2px solid #004587;
-    border-radius: 6px;
-    margin: 0.5rem auto 0 auto;
-    font-weight: 600;
-    min-width: 200px;
-    display: block;
-    background: #fff;
-}
-.music-player audio {
-    margin: 0.75rem auto 0 auto;
-    max-width: 250px;
-    display: block;
-}
-
+            background: #fbba07;
+            color: #004587;
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 80px;
+            grid-column: 1 / -1;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .music-player select {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #004587;
+            border-radius: 6px;
+            margin: 0.5rem auto 0 auto;
+            font-weight: 600;
+            min-width: 200px;
+            display: block;
+            background: #fff;
+        }
+        .music-player audio {
+            margin: 0.75rem auto 0 auto;
+            max-width: 250px;
+            display: block;
+        }
         .reflection-section {
             display: none;
             background: #fff;
@@ -234,32 +252,30 @@
 <body>
     <div class="container">
         <h1>2 Wins and a Wobble</h1>
-
-<div class="instructions">
-    <p><strong>Welcome!</strong> Select your study time below, and you'll see curated resources to help you prepare. Feel free to use these or your own study methods.</p>
-    <br>
-    <p><strong>Tip:</strong> All resource links open in new tabs, so this page stays open for you to track your progress.</p>
-    <br>
-    <p>The key part: While studying (or after), identify <strong>2 "Wins"</strong>—concepts you've mastered—and <strong>1 "Wobble"</strong>—a gap in your understanding.</p>
-    <br>
-    <p>By tracking these together, we can focus our revision where it's needed most as the big day approaches. Let's do this! 💪</p>
-        <br>
-</div>
-
+        
+        <div class="instructions">
+            <p><strong>Welcome!</strong> Select your study time below, and you'll see curated resources to help you prepare. Feel free to use these or your own study methods.</p>
+            <br>
+            <p><strong>Tip:</strong> All resource links open in new tabs, so this page stays open for you to track your progress.</p>
+            <br>
+            <p>The key part: While studying (or after), identify <strong>2 "Wins"</strong>—concepts you've mastered—and <strong>1 "Wobble"</strong>—a gap in your understanding.</p>
+            <br>
+            <p>By tracking these together, we can focus our revision where it's needed most as the big day approaches. Let's do this! 💪</p>
+        </div>
         
         <div class="time-selector" id="timeSelector">
-    <label for="studyTime">Choose your study time:</label><br>
-    <select id="studyTime">
-        <option value="5">5 minutes</option>
-        <option value="10">10 minutes</option>
-        <option value="15" selected>15 minutes</option>
-        <option value="20">20 minutes</option>
-        <option value="25">25 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="60">1 hour</option>
-    </select>
-    <button class="start-btn" id="startBtn">Start Studying</button>
-</div>
+            <label for="studyTime">Choose your study time:</label><br>
+            <select id="studyTime">
+                <option value="5">5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="15" selected>15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="25">25 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">1 hour</option>
+            </select>
+            <button class="start-btn" id="startBtn">Start Studying</button>
+        </div>
 
         <div class="timer" id="timer">Study Time: 15:00</div>
 
