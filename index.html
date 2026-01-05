@@ -118,37 +118,38 @@
             margin-top: 0.5rem;
         }
         .music-player {
-            background: #fff;
-            color: #004587;
-            padding: 1.5rem 1rem;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 120px;
-        }
-       .music-player select {
+    background: #fbba07;
+    color: #004587;
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 80px;
+    grid-column: 1 / -1;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.music-player select {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border: 2px solid #004587;
     border-radius: 6px;
     margin: 0.5rem auto 0 auto;
     font-weight: 600;
-    width: auto;
     min-width: 200px;
+    display: block;
+    background: #fff;
+}
+.music-player audio {
+    margin: 0.75rem auto 0 auto;
+    max-width: 250px;
     display: block;
 }
 
-        .music-player audio {
-            margin-top: 0.75rem;
-            width: 100%;
-            max-width: 250px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
         .reflection-section {
             display: none;
             background: #fff;
