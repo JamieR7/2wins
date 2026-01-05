@@ -106,6 +106,7 @@
             visibility: hidden;
             height: 0;
             overflow: hidden;
+            transition: opacity 0.3s ease;
         }
         
         .study-resources.active {
@@ -322,8 +323,8 @@
                 <div style="font-size: 1rem; font-weight: bold; margin-bottom: 0.5rem;">🎵 Study Music</div>
                 <select id="musicSelect">
                     <option value="">Select music...</option>
-                    <option value="option1.mp3">Option 1</option>
-                    <option value="option2.mp3">Option 2</option>
+                    <option value="music/BrainFM.mp3">BrainFM</option>
+                    <option value="music/Endel.mp3">Endel</option>
                 </select>
                 <audio id="musicPlayer" controls style="display: none;">
                     <source id="musicSource" src="" type="audio/mpeg">
@@ -333,7 +334,7 @@
         </div>
         
         <div class="reflection-section" id="reflectionSection">
-            <h2>Time to Reflect!</h2>
+            <h2>Take Notes as You Study</h2>
             
             <div class="input-group win">
                 <label>🏆 Win #1: What did you nail?</label>
@@ -378,9 +379,11 @@
             const selectedMinutes = parseInt(document.getElementById('studyTime').value);
             timeRemaining = selectedMinutes * 60;
             
+            // Hide time selector and show everything else
             document.getElementById('timeSelector').classList.add('hidden');
             document.getElementById('timer').classList.add('active');
             document.getElementById('studySection').classList.add('active');
+            document.getElementById('reflectionSection').classList.add('active');
             
             timerInterval = setInterval(updateTimer, 1000);
             updateTimer();
@@ -393,11 +396,9 @@
             
             if (timeRemaining === 0) {
                 clearInterval(timerInterval);
-                document.getElementById('timer').textContent = "Time's up! Time to reflect 🎯";
+                document.getElementById('timer').textContent = "Time's up! 🎯 Complete your reflection below";
                 document.getElementById('timer').style.background = '#e73037';
                 document.getElementById('timer').style.color = '#fff';
-                document.getElementById('studySection').classList.remove('active');
-                document.getElementById('reflectionSection').classList.add('active');
             } else {
                 timeRemaining--;
             }
