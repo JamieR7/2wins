@@ -261,6 +261,19 @@
             cursor: not-allowed;
             transform: none;
         }
+        @media (max-width: 480px) {
+  .time-selector select {
+    margin-right: 0;      /* right margin doesn't help once it wraps */
+    width: 100%;
+  }
+
+  .time-selector .start-btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;  /* creates the missing space on phones */
+  }
+}
+
     </style>
 </head>
 <body>
