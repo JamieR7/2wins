@@ -415,14 +415,12 @@
             border-radius: inherit;
         }
 
-        /* Flip Animations */
-        .flip-next {
-            transform: rotateY(-20deg) translateX(-100%) scale(0.9);
-            opacity: 0;
+        /* Fade Transitions */
+        .db-page-container {
+            transition: opacity 0.3s ease;
         }
 
-        .flip-prev {
-            transform: rotateY(20deg) translateX(100%) scale(0.9);
+        .db-fading {
             opacity: 0;
         }
 
@@ -701,28 +699,19 @@
             isTransitioning = true;
             const container = document.getElementById('dbPageContainer');
 
-            // Add flip animation class
-            container.classList.add(dir > 0 ? 'flip-next' : 'flip-prev');
+            // Fade out
+            container.classList.add('db-fading');
 
             setTimeout(() => {
                 dbIndex = nextIndex;
                 dbRender();
-                // Reset position for entry
-                container.style.transition = 'none';
-                container.classList.remove('flip-next', 'flip-prev');
-                container.classList.add(dir > 0 ? 'flip-prev' : 'flip-next');
-
-                // Force reflow
-                container.offsetHeight;
-
-                // Animate entry
-                container.style.transition = '';
-                container.classList.remove('flip-next', 'flip-prev');
+                // Fade back in
+                container.classList.remove('db-fading');
 
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 600);
-            }, 600);
+                }, 300);
+            }, 300);
         }
 
         function dbRender() {
