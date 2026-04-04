@@ -594,12 +594,29 @@
     <script src="app.js"></script>
     <script>
         // Data Book viewer
-        // To add more pages, put files like 'data_book_2.png' in the images folder
-        // and add their paths to this array:
-        const dataBookImages = [
-            'images/data_book.png'
-        ];
+        let dataBookImages = ['images/data_book.png'];
         let dbIndex = 0;
+
+        // Auto-discover more pages like data_book_2.png, data_book_3.png, etc.
+        async function discoverPages() {
+            for (let i = 2; i <= 20; i++) {
+                const path = `images/data_book_${i}.png`;
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    if (response.ok) {
+                        if (!dataBookImages.includes(path)) {
+                            dataBookImages.push(path);
+                        }
+                    } else {
+                        break; // Stop at the first missing file in the sequence
+                    }
+                } catch (e) {
+                    break;
+                }
+            }
+            dbRender(); // Re-render once we've found all pages
+        }
+        discoverPages();
 
         function openDataBook() {
             dbIndex = 0;
@@ -635,11 +652,11 @@
             img.alt = 'Data Book page ' + (dbIndex + 1);
             counter.textContent = (dbIndex + 1) + ' / ' + dataBookImages.length;
 
-            // Only show navigation controls if there are multiple pages
+            // Always show buttons if we have more than 1 page
             const hasMultiple = dataBookImages.length > 1;
-            prevBtn.style.visibility = hasMultiple ? 'visible' : 'hidden';
-            nextBtn.style.visibility = hasMultiple ? 'visible' : 'hidden';
-            counter.style.visibility = hasMultiple ? 'visible' : 'hidden';
+            prevBtn.style.display = hasMultiple ? 'inline-block' : 'none';
+            nextBtn.style.display = hasMultiple ? 'inline-block' : 'none';
+            counter.style.display = hasMultiple ? 'inline-block' : 'none';
 
             prevBtn.disabled = dbIndex === 0;
             nextBtn.disabled = dbIndex === dataBookImages.length - 1;
