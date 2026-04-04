@@ -353,26 +353,37 @@
             background: rgba(0, 0, 0, 0.92);
             z-index: 9999;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
         #dataBookModal.open {
             display: flex;
         }
 
-        #dataBookModal img {
-            max-height: 85vh;
-            max-width: 95vw;
+        #dbScrollArea {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            padding: 3.5rem 1rem 1rem;
+        }
+
+        #dataBookImg {
+            width: 100%;
+            max-width: 860px;
+            height: auto;
             border-radius: 8px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            display: block;
         }
 
         .db-controls {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 1.5rem;
-            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            flex-shrink: 0;
         }
 
         .db-btn {
@@ -407,7 +418,7 @@
 
         .db-close {
             position: absolute;
-            top: 1rem;
+            top: 0.75rem;
             right: 1.25rem;
             background: none;
             border: none;
@@ -415,6 +426,7 @@
             font-size: 2rem;
             cursor: pointer;
             line-height: 1;
+            z-index: 10000;
         }
     </style>
 </head>
@@ -564,7 +576,9 @@
     <!-- Data Book Modal -->
     <div id="dataBookModal">
         <button class="db-close" onclick="closeDataBook()" aria-label="Close">✕</button>
-        <img id="dataBookImg" src="" alt="Data Book page">
+        <div id="dbScrollArea">
+            <img id="dataBookImg" src="" alt="Data Book page">
+        </div>
         <div class="db-controls">
             <button class="db-btn" id="dbPrev" onclick="dbNav(-1)">◀ Prev</button>
             <span class="db-counter" id="dbCounter">Page 1 of 1</span>
@@ -604,6 +618,8 @@
                 'Page ' + (dbIndex + 1) + ' of ' + dataBookImages.length;
             document.getElementById('dbPrev').disabled = dbIndex === 0;
             document.getElementById('dbNext').disabled = dbIndex === dataBookImages.length - 1;
+            // Scroll back to top whenever the page changes
+            document.getElementById('dbScrollArea').scrollTop = 0;
         }
 
         // Keyboard navigation
