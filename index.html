@@ -344,6 +344,78 @@
                 /* creates the missing space on phones */
             }
         }
+
+        /* Data Book Modal */
+        #dataBookModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #dataBookModal.open {
+            display: flex;
+        }
+
+        #dataBookModal img {
+            max-height: 85vh;
+            max-width: 95vw;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .db-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .db-btn {
+            background: #fbba07;
+            color: #004587;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .db-btn:hover {
+            transform: scale(1.07);
+        }
+
+        .db-btn:disabled {
+            background: #555;
+            color: #aaa;
+            cursor: default;
+            transform: none;
+        }
+
+        .db-counter {
+            color: #fff;
+            font-size: 1rem;
+            min-width: 6rem;
+            text-align: center;
+        }
+
+        .db-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.25rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
     </style>
 </head>
 
@@ -437,10 +509,15 @@
                 <span class="resource-subtitle">Our winometer and wobbleometer from the form below</span>
             </a>
 
-             <a href="https://jamier7.github.io/react/" class="resource-btn" target="_blank" rel="noopener">
+            <a href="https://jamier7.github.io/react/" class="resource-btn" target="_blank" rel="noopener">
                 Reaction test
                 <span class="resource-subtitle">Test yourself and learn about Hick's Law</span>
             </a>
+
+            <button class="resource-btn" onclick="openDataBook()">
+                📖 Data Book
+                <span class="resource-subtitle">Browse all data book pages in order</span>
+            </button>
 
             <div class="music-player">
                 <div style="font-size: 1rem; font-weight: bold; margin-bottom: 0.5rem;">Study Music</div>
@@ -484,9 +561,65 @@
         </div>
     </div>
 
+    <!-- Data Book Modal -->
+    <div id="dataBookModal">
+        <button class="db-close" onclick="closeDataBook()" aria-label="Close">✕</button>
+        <img id="dataBookImg" src="" alt="Data Book page">
+        <div class="db-controls">
+            <button class="db-btn" id="dbPrev" onclick="dbNav(-1)">◀ Prev</button>
+            <span class="db-counter" id="dbCounter">Page 1 of 1</span>
+            <button class="db-btn" id="dbNext" onclick="dbNav(1)">Next ▶</button>
+        </div>
+    </div>
+
     <!-- Link to JavaScript files -->
     <script src="sehs-concepts.js"></script>
     <script src="app.js"></script>
+    <script>
+        // Data Book viewer
+        const dataBookImages = [
+            'images/data_book.png'
+            // Add more pages here as: 'images/data_book_2.png', etc.
+        ];
+        let dbIndex = 0;
+
+        function openDataBook() {
+            dbIndex = 0;
+            dbRender();
+            document.getElementById('dataBookModal').classList.add('open');
+        }
+
+        function closeDataBook() {
+            document.getElementById('dataBookModal').classList.remove('open');
+        }
+
+        function dbNav(dir) {
+            dbIndex = Math.max(0, Math.min(dataBookImages.length - 1, dbIndex + dir));
+            dbRender();
+        }
+
+        function dbRender() {
+            document.getElementById('dataBookImg').src = dataBookImages[dbIndex];
+            document.getElementById('dbCounter').textContent =
+                'Page ' + (dbIndex + 1) + ' of ' + dataBookImages.length;
+            document.getElementById('dbPrev').disabled = dbIndex === 0;
+            document.getElementById('dbNext').disabled = dbIndex === dataBookImages.length - 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function (e) {
+            const modal = document.getElementById('dataBookModal');
+            if (!modal.classList.contains('open')) return;
+            if (e.key === 'ArrowRight') dbNav(1);
+            if (e.key === 'ArrowLeft') dbNav(-1);
+            if (e.key === 'Escape') closeDataBook();
+        });
+
+        // Click backdrop to close
+        document.getElementById('dataBookModal').addEventListener('click', function (e) {
+            if (e.target === this) closeDataBook();
+        });
+    </script>
 </body>
 
 </html>
