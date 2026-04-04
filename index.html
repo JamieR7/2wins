@@ -350,7 +350,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.92);
+            background: #111;
             z-index: 9999;
             flex-direction: column;
         }
@@ -359,20 +359,23 @@
             display: flex;
         }
 
-        #dbScrollArea {
+        #dbImageArea {
             flex: 1;
-            overflow-y: auto;
             display: flex;
+            align-items: center;
             justify-content: center;
-            padding: 3.5rem 1rem 1rem;
+            overflow: hidden;
+            padding: 2.5rem 1rem 0.5rem;
         }
 
         #dataBookImg {
-            width: 100%;
-            max-width: 860px;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
             display: block;
         }
 
@@ -576,7 +579,7 @@
     <!-- Data Book Modal -->
     <div id="dataBookModal">
         <button class="db-close" onclick="closeDataBook()" aria-label="Close">✕</button>
-        <div id="dbScrollArea">
+        <div id="dbImageArea">
             <img id="dataBookImg" src="" alt="Data Book page">
         </div>
         <div class="db-controls">
@@ -591,9 +594,10 @@
     <script src="app.js"></script>
     <script>
         // Data Book viewer
+        // To add more pages, put files like 'data_book_2.png' in the images folder
+        // and add their paths to this array:
         const dataBookImages = [
             'images/data_book.png'
-            // Add more pages here as: 'images/data_book_2.png', etc.
         ];
         let dbIndex = 0;
 
@@ -613,13 +617,32 @@
         }
 
         function dbRender() {
-            document.getElementById('dataBookImg').src = dataBookImages[dbIndex];
-            document.getElementById('dbCounter').textContent =
-                'Page ' + (dbIndex + 1) + ' of ' + dataBookImages.length;
-            document.getElementById('dbPrev').disabled = dbIndex === 0;
-            document.getElementById('dbNext').disabled = dbIndex === dataBookImages.length - 1;
-            // Scroll back to top whenever the page changes
-            document.getElementById('dbScrollArea').scrollTop = 0;
+            const img = document.getElementById('dataBookImg');
+            const counter = document.getElementById('dbCounter');
+            const prevBtn = document.getElementById('dbPrev');
+            const nextBtn = document.getElementById('dbNext');
+
+            if (dataBookImages.length === 0) {
+                img.src = '';
+                img.alt = 'No pages found';
+                counter.textContent = '0 / 0';
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+
+            img.src = dataBookImages[dbIndex];
+            img.alt = 'Data Book page ' + (dbIndex + 1);
+            counter.textContent = (dbIndex + 1) + ' / ' + dataBookImages.length;
+
+            // Only show navigation controls if there are multiple pages
+            const hasMultiple = dataBookImages.length > 1;
+            prevBtn.style.visibility = hasMultiple ? 'visible' : 'hidden';
+            nextBtn.style.visibility = hasMultiple ? 'visible' : 'hidden';
+            counter.style.visibility = hasMultiple ? 'visible' : 'hidden';
+
+            prevBtn.disabled = dbIndex === 0;
+            nextBtn.disabled = dbIndex === dataBookImages.length - 1;
         }
 
         // Keyboard navigation
