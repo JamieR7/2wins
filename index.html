@@ -645,10 +645,16 @@
             nextBtn.disabled = dbIndex === dataBookImages.length - 1;
         }
 
-        // Keyboard navigation
+        // Keyboard navigation with debounce
+        let dbLastKeyTime = 0;
         document.addEventListener('keydown', function (e) {
             const modal = document.getElementById('dataBookModal');
             if (!modal.classList.contains('open')) return;
+
+            const now = Date.now();
+            if (now - dbLastKeyTime < 250) return; // 250ms debounce
+            dbLastKeyTime = now;
+
             if (e.key === 'ArrowRight') dbNav(1);
             if (e.key === 'ArrowLeft') dbNav(-1);
             if (e.key === 'Escape') closeDataBook();
